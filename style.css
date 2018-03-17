@@ -1,0 +1,47 @@
+/* Styles go here */
+
+h1 {
+	background-color: black;
+	color: yellow;
+}
+
+h2 {
+	background-color: yellow;
+	color: black;
+}
+
+h3 {
+	background-color: white;
+	color: blue;
+}
+table {
+    width:35%;
+	background-color: white;
+}
+
+table, th, td {
+    border: 2px solid red;
+    border-collapse: collapse;
+    /* background-color: #f1f1c1; */
+    /* background-color: white; */
+}
+
+th, td {
+    padding: 5px;
+}
+
+/* Sudoku table header */
+td {
+    text-align: center;
+}
+
+/* Sudoku table data */
+td {
+    text-align: center;
+	font-style: italic;
+	color:	blue;
+	
+}
+
+
+

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <link rel="stylesheet" href="style2.css">
+	
+    <script src="NWPuzzles2.js"></script>
+    <script src="HoerZuPuzzles.js"></script> 
+	<script src="DPpuzzles.js"></script> 
+    
+	<script src="script.js"></script>
+    
+	<!-- Solving Methods, one per file -->
+	<script src="methodicalSearch.js"></script>
+    <script src="nackterEiner.js"></script>
+	<script src="versteckterEiner.js"></script>
+	<script src="directTwin.js"></script>
+	<script src="completeRCB.js"></script>
+	
+	<script src="prepHTML.js"></script>
+	<script src="showFunctions.js"></script>
+  </head>
+
+  <body>
+    <h1>SuDoKu Solver</h1>
+    <h2>Sudoku Solver Program</h2>
+	
+	<!-- Select Sudoku Puzzle from a GENERATED List 	-->
+	<h3>Test: Select Sudoku Puzzle from *generated* drop down List</h3>
+	<p id="selectPuzzle"></p>	<!-- will be replaced by output of prepSudokuList, -->
+	
+	<script>
+      document.getElementById("selectPuzzle").innerHTML = prepSudokuList();
+	</script>
+	<button type="button" onclick="selectPuzzle()">Select Sudoku</button>  
+	  
+	 <script>  
+	  function selectPuzzle() {
+			var idx = document.getElementById("sudokuList").selectedIndex;
+			var opts = document.getElementById("sudokuList").options;
+			<!-- alert("Index: " + opts[idx].index + " is " + opts[idx].text); -->
+			selectedPuzzle = opts[idx].text;
+			console.log("selectedPuzzle: " + selectedPuzzle);
+			puzzle = puzzleObjList[idx].puzzleData;
+			description = puzzleObjList[idx].puzzleDescription;
+			initSolutionMatrix(puzzle, solutionMatrix);
+			<!-- OLD: document.getElementById("puzzle").innerHTML = prepSudokuTable(); -->
+			document.getElementById("puzzleGrid").innerHTML = prepSudokuGrid();			
+		}
+	   
+    </script>
+	
+	
+	<!-- TBD: Select sleep timer test -->
+	
+	<!-- Show Method and next setPuzzleValue() value -->
+	<p id=methodAndPuzzleValue> Method and Puzzle Value</p>
+	<script>
+	document.getElementById("methodAndPuzzleValue").innerHTML = "Method Name not yet defined in index.html" + ": " + 999;
+    </script>    
+    
+	<!-- OLD: prepSudokuTable() 
+	<div id="puzzle"></div>
+	<script>
+      document.getElementById("puzzle").innerHTML = prepSudokuTable();  
+    </script>
+	-->
+	
+	<!-- NEW: prepSudokuGrid() -->
+	<div id="puzzleGrid"></div>
+	<script>
+      document.getElementById("puzzleGrid").innerHTML = prepSudokuGrid();  
+    </script>
+      
+	<!-- Select Debug ON/OFF -->
+	<form name="debugForm">
+	  <input type="radio" name="myDebug" value="true"> DEBUG<br>
+	  <input type="radio" name="myDebug" value="false" checked> no DEBUG<br>
+	</form> 
+	
+	<!-- Select Solving Methods using checkboxes -->
+	<h3 id="solvingMethods">Select Solving Methods</h3>
+	
+	<form>
+		<input type="checkbox" name="method1" id="methodicalSearch" background-color="red" checked disabled> Methodical Search (always selected)
+		<br>
+		<input type="checkbox" name="method2" id="nackterEiner"  onclick="isMethodChecked('nackterEiner')"> Nackter Einer
+		<br>
+		<input type="checkbox" name="method3" id="versteckterEiner"  onclick="isMethodChecked('versteckterEiner')"> Verstecker Einer
+		<br>
+		<input type="checkbox" name="method4" id="directTwin"  onclick="isMethodChecked('directTwin')"> Direct Twin
+		<br>
+		<input type="checkbox" name="method5" id="Drillinge" 	 onclick="isMethodChecked('Drillinge')"> Drillinge
+		<br>
+		<input type="checkbox" name="method6" id="completeRCB" 	 onclick="isMethodChecked('completeRCB')"> Complete RCB (Row, Column, Block)
+		<br>
+	</form> 
+
+	<script>
+		function isMethodChecked( method ) {
+			
+			switch( method ) {
+				case "nackterEiner":			
+					isNackterEinerChecked = document.getElementById("nackterEiner").checked;
+					console.log("isNackterEinerChecked: ", isNackterEinerChecked);
+					break;
+				case "versteckterEiner":			
+					isVersteckterEinerChecked = document.getElementById("versteckterEiner").checked;
+					console.log("isVersteckterEinerChecked: ", isVersteckterEinerChecked);
+					break;
+				case "directTwin":			
+					isDirectTwinChecked = document.getElementById("directTwin").checked;
+					console.log("isDirectTwinChecked: ", isDirectTwinChecked);
+					break;
+				case "Drillinge":			
+					isDrillingeChecked = document.getElementById("Drillinge").checked;
+					console.log("isDrillingeChecked: ", isDrillingeChecked);
+					break;	
+				case "completeRCB":			
+					isCompleteRCBChecked = document.getElementById("completeRCB").checked;
+					console.log("isCompleteRCBChecked: ", isCompleteRCBChecked);
+					break;	
+				default:
+					break;
+			}
+		}
+	</script>
+	
+	<!-- Result will be shown here as:	SOLVED | NOT SOLVED -->
+	<h3 id="result">RESULT comes here</h3>
+   	<button type="button" onclick="document.getElementById('result').innerHTML = solveSudokuPuzzle()"> Solve </button>
+   
+    <!-- LOG some stuff ... -->
+    <h3 id="myLog">Logs</h3> 
+	<p id="logMethodicalSearch">Methodical Search</p> 
+    <p id="logNackterEiner">Nackter Einer</p> 
+    <p id="logVersteckterEiner">Versteckter Einer</p>
+	<p id="logDirectTwin">Direct Twin</p>
+	<p id="logDrillinge">Drillinge</p>
+	<p id="logCompleteRCB">Complete RCB</p> 
+
+    <!-- STATISTICS -->
+	<h3 id="Statistics">Statistics</h3> 
+	<p id="solvedWithMethodicalSearch">solvedWithMethodicalSearch: </p> 
+	<p id="solvedWithNackterEiner">solvedWithNackterEiner: </p>
+	<p id="solvedWithVersteckterEiner">solvedWithVersteckterEiner: </p>
+	<p id="solvedWithDirectTwin">solvedWithDirectTwin: </p>
+	<p id="solvedWithDrillinge">solvedWithDrillinge: </p>
+	<p id="solvedWithCompleteRCB">solvedWithCompleteRCB: </p>
+    
+  </body>
+
+</html>
